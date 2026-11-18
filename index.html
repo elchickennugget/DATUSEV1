@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DATUSE! - SMAN 3 BANTAENG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-sky: #1b4b8a;
+      --bg-deep: #0e294b;
+      --panel-bg: #2667b8;
+      --panel-light: #4a90e2;
+      --panel-border: #091a32;
+      --accent-yellow: #ffd43b;
+      --accent-cyan: #5ce1e6;
+      --accent-red: #ff595e;
+      --accent-green: #52b788;
+      --text-white: #f8f9fa;
+      --text-dark: #091a32;
+      --pixel-shadow: 4px 4px 0px #091a32;
+      --pixel-shadow-sm: 2px 2px 0px #091a32;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      image-rendering: pixelated;
+    }
+
+    body {
+      font-family: 'VT323', monospace;
+      background-color: var(--bg-deep);
+      background-image: 
+        radial-gradient(rgba(92, 225, 230, 0.15) 2px, transparent 2px),
+        linear-gradient(180deg, #163d73 0%, #0e294b 100%);
+      background-size: 24px 24px, 100% 100%;
+      color: var(--text-white);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px 12px 60px;
+      font-size: 20px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .pixel-box {
+      background: var(--panel-bg);
+      border: 4px solid var(--panel-border);
+      box-shadow: var(--pixel-shadow);
+      padding: 18px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .pixel-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .header-box {
+      text-align: center;
+      background: linear-gradient(180deg, #2b75d3 0%, #1d5296 100%);
+      padding: 24px 16px;
+    }
+
+    .title-main {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(28px, 6vw, 44px);
+      color: var(--accent-yellow);
+      text-shadow: 4px 4px 0px #091a32, -2px -2px 0px #091a32, 2px -2px 0px #091a32, -2px 2px 0px #091a32;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .title-sub {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(10px, 2.4vw, 13px);
+      color: #dbeafe;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+
+    .school-badge {
+      display: inline-block;
+      background: #091a32;
+      color: var(--accent-cyan);
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(10px, 2.5vw, 13px);
+      padding: 8px 14px;
+      border: 3px solid var(--accent-cyan);
+      box-shadow: 3px 3px 0px #050e1c;
+    }
+
+    .control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      background: #18437a;
+      padding: 12px;
+      border: 4px solid var(--panel-border);
+      box-shadow: var(--pixel-shadow);
+      margin-bottom: 20px;
+    }
+
+    .user-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pixel-badge {
+      background: #0e294b;
+      border: 2px solid var(--accent-cyan);
+      padding: 4px 10px;
+      font-size: 18px;
+      color: var(--accent-cyan);
+    }
+
+    .pixel-btn {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 11px;
+      padding: 10px 14px;
+      border: 3px solid var(--panel-border);
+      background: var(--accent-yellow);
+      color: var(--text-dark);
+      box-shadow: var(--pixel-shadow-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+
+    .pixel-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px var(--panel-border);
+    }
+
+    .pixel-btn.btn-blue { background: var(--accent-cyan); color: var(--text-dark); }
+    .pixel-btn.btn-green { background: var(--accent-green); color: #fff; }
+    .pixel-btn.btn-red { background: var(--accent-red); color: #fff; }
+    .pixel-btn.btn-dark { background: #0e294b; color: #fff; border-color: #4a90e2; }
+
+    .section-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+      color: var(--accent-yellow);
+      text-shadow: 2px 2px 0px #091a32;
+      margin-bottom: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: #dbeafe;
+    }
+
+    input, select {
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      padding: 10px 12px;
+      background: #e8f1fc;
+      color: #091a32;
+      border: 3px solid #091a32;
+      outline: none;
+      width: 100%;
+    }
+
+    .queue-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 9px;
+      padding: 7px 10px;
+      background: #163d73;
+      color: #fff;
+      border: 3px solid #091a32;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--accent-yellow);
+      color: #091a32;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-card {
+      background: #1b4b8a;
+      border: 3px solid #091a32;
+      box-shadow: 3px 3px 0px #091a32;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .task-card.urgent { border-color: var(--accent-yellow); background: #23599e; }
+    .task-card.overdue { border-color: var(--accent-red); background: #3d2442; }
+    .task-card.completed { opacity: 0.65; background: #12335e; }
+    .task-card.completed .task-name { text-decoration: line-through; }
+
+    .task-info { flex: 1; min-width: 0; }
+    .task-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 6px; }
+
+    .queue-num { background: var(--accent-yellow); color: #091a32; font-family: 'Press Start 2P', cursive; font-size: 10px; padding: 3px 6px; border: 2px solid #091a32; }
+    .mapel-tag { background: #091a32; color: var(--accent-cyan); font-family: 'Press Start 2P', cursive; font-size: 9px; padding: 4px 8px; border: 2px solid var(--accent-cyan); }
+    .deadline-tag { font-size: 18px; padding: 2px 8px; background: #0e294b; border: 2px solid #4a90e2; color: #fff; }
+    .deadline-tag.today { background: var(--accent-yellow); color: #091a32; border-color: #091a32; font-weight: bold; }
+    .deadline-tag.late { background: var(--accent-red); color: #fff; border-color: #091a32; }
+
+    .task-name { font-size: 24px; color: #ffffff; word-break: break-word; }
+    .task-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    .empty-state { text-align: center; padding: 30px 15px; background: #163d73; border: 3px dashed #4a90e2; color: #bdd7f7; font-size: 22px; }
+
+    .notif-bar {
+      background: #0e294b;
+      border: 3px solid var(--accent-cyan);
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 14, 28, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      z-index: 999;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: var(--panel-bg);
+      border: 4px solid #091a32;
+      box-shadow: 6px 6px 0px #000;
+      padding: 20px;
+    }
+
+    .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 14px 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #163d73;
+      border: 2px solid #091a32;
+      padding: 8px 10px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent-yellow);
+      color: #091a32;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      padding: 12px 16px;
+      border: 4px solid #091a32;
+      box-shadow: 4px 4px 0px #000;
+      z-index: 1000;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="pixel-box header-box">
+      <h1 class="title-main">DATUSE!</h1>
+      <p class="title-sub">(daftar tugas sekolah)</p>
+      <div class="school-badge">★ SMAN 3 BANTAENG ★</div>
+    </header>
+
+    <div class="control-bar">
+      <div class="user-status">
+        <span>👤 SISWA:</span>
+        <span class="pixel-badge" id="currentUserDisplay">Siswa_01</span>
+        <button type="button" class="pixel-btn btn-blue" id="openUserModalBtn">GANTI AKUN</button>
+      </div>
+      <div class="user-status">
+        <button type="button" class="pixel-btn btn-dark" id="sfxToggleBtn">🔊 SFX: ON</button>
+      </div>
+    </div>
+
+    <div class="notif-bar">
+      <div>
+        <span>🔔 ALARM (07:00-07:30 WITA): </span>
+        <strong id="notifStatusText" style="color: var(--accent-yellow);">MENGECEK...</strong>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="pixel-btn btn-green" id="enableNotifBtn">IZINKAN NOTIF</button>
+        <button type="button" class="pixel-btn btn-dark" id="testNotifBtn">TES</button>
+      </div>
+    </div>
+
+    <section class="pixel-box">
+      <h2 class="section-title">➕ TAMBAH ANTRIAN TUGAS</h2>
+      <form id="taskForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="mapelSelect">MATA PELAJARAN</label>
+            <select id="mapelSelect" required>
+              <option value="Matematika">Matematika</option>
+              <option value="Biologi">Biologi</option>
+              <option value="Sosiologi">Sosiologi</option>
+              <option value="Fisika">Fisika</option>
+              <option value="Seni Budaya">Seni Budaya</option>
+              <option value="PKN">PKN</option>
+              <option value="Koding dan AI">Koding dan AI</option>
+              <option value="Penjasorkes">Penjasorkes</option>
+              <option value="PAI">PAI</option>
+              <option value="Informatika">Informatika</option>
+              <option value="BHS Inggris">BHS Inggris</option>
+              <option value="Muatan Lokal">Muatan Lokal</option>
+              <option value="Sejarah">Sejarah</option>
+              <option value="Kimia">Kimia</option>
+              <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+              <option value="Ekonomi">Ekonomi</option>
+              <option value="Geografi">Geografi</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="deadlineInput">TANGGAL DEADLINE</label>
+            <input type="date" id="deadlineInput" min="2024-01-01" max="2030-12-31" required />
+          </div>
+
+          <div class="form-group full-width">
+            <label for="taskNameInput">NAMA TUGAS / MATERI</label>
+            <input type="text" id="taskNameInput" placeholder="Contoh: Tugas Sejarah..." required maxlength="120" />
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+          <button type="submit" class="pixel-btn">💾 SIMPAN KE ANTRIAN</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="pixel-box">
+      <div class="queue-header">
+        <h2 class="section-title" style="margin-bottom:0;">📋 ANTRIAN TUGAS (<span id="taskCount">0</span>)</h2>
+        <div class="filter-tabs">
+          <button type="button" class="tab-btn active" data-filter="all">SEMUA</button>
+          <button type="button" class="tab-btn" data-filter="pending">BELUM</button>
+          <button type="button" class="tab-btn" data-filter="completed">SELESAI</button>
+        </div>
+      </div>
+
+      <div id="taskList" class="task-list"></div>
+    </section>
+  </div>
+
+  <div class="modal-overlay" id="userModal">
+    <div class="modal-box">
+      <h3 class="section-title">👾 PILIH / BUAT AKUN SISWA</h3>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="newUsernameInput" placeholder="Nama / NISN..." maxlength="20" />
+        <button type="button" class="pixel-btn btn-green" id="addUserBtn">BUAT</button>
+      </div>
+      <div class="user-list" id="userListContainer"></div>
+      <div style="text-align: right; margin-top: 10px;">
+        <button type="button" class="pixel-btn btn-red" id="closeUserModalBtn">TUTUP</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toastBox"></div>
+
+  <script>
+    let sfxEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSFX(type = 'click') {
+      if (!sfxEnabled) return;
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        if (type === 'click') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(780, now + 0.06);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+          osc.start(now);
+          osc.stop(now + 0.07);
+        } else if (type === 'save') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.setValueAtTime(554.37, now + 0.07);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        }
+      } catch (e) {}
+    }
+
+    const STORAGE_USERS_KEY = 'datuse_sman3_users';
+    const STORAGE_ACTIVE_USER_KEY = 'datuse_sman3_active_user';
+    let users = JSON.parse(localStorage.getItem(STORAGE_USERS_KEY)) || ['Siswa_01'];
+    let activeUser = localStorage.getItem(STORAGE_ACTIVE_USER_KEY) || users[0];
+    let currentFilter = 'all';
+
+    function getTasksKey(username) { return `datuse_sman3_tasks_${username}`; }
+    function getUserTasks() { return JSON.parse(localStorage.getItem(getTasksKey(activeUser))) || []; }
+    function saveUserTasks(tasks) { localStorage.setItem(getTasksKey(activeUser), JSON.stringify(tasks)); }
+    function saveUsersList() {
+      localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
+      localStorage.setItem(STORAGE_ACTIVE_USER_KEY, activeUser);
+    }
+
+    function getWitaDateInfo() {
+      const now = new Date();
+      const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const witaDate = new Date(utcMs + (8 * 3600000));
+      return {
+        dateStr: `${witaDate.getFullYear()}-${String(witaDate.getMonth() + 1).padStart(2, '0')}-${String(witaDate.getDate()).padStart(2, '0')}`,
+        hours: witaDate.getHours(),
+        minutes: witaDate.getMinutes(),
+        formatted: `${String(witaDate.getDate()).padStart(2, '0')}/${String(witaDate.getMonth() + 1).padStart(2, '0')}/${witaDate.getFullYear()}`
+      };
+    }
+
+    function updateNotifStatusUI() {
+      const statusEl = document.getElementById('notifStatusText');
+      if (!('Notification' in window)) {
+        statusEl.textContent = 'TIDAK DIDUKUNG';
+        statusEl.style.color = 'var(--accent-red)';
+        return;
+      }
+      if (Notification.permission === 'granted') {
+        statusEl.textContent = 'AKTIF';
+        statusEl.style.color = 'var(--accent-green)';
+      } else if (Notification.permission === 'denied') {
+        statusEl.textContent = 'DIBLOKIR';
+        statusEl.style.color = 'var(--accent-red)';
+      } else {
+        statusEl.textContent = 'BELUM AKTIF';
+        statusEl.style.color = 'var(--accent-yellow)';
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => { toast.style.display = 'none'; }, 2600);
+    }
+
+    function sendPixelNotification(title, body) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.ready.then(reg => {
+              reg.showNotification(title, { body, tag: 'datuse-alert' });
+            });
+          } else {
+            new Notification(title, { body, tag: 'datuse-alert' });
+          }
+        } catch (err) {
+          new Notification(title, { body, tag: 'datuse-alert' });
+        }
+      }
+    }
+
+    function checkDeadlineSchedule() {
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+      const wita = getWitaDateInfo();
+      if (wita.hours === 7 && wita.minutes >= 0 && wita.minutes <= 30) {
+        const tasks = getUserTasks();
+        const dueToday = tasks.filter(t => !t.completed && t.deadline === wita.dateStr);
+        if (dueToday.length > 0) {
+          const notifiedKey = `datuse_notified_${activeUser}_${wita.dateStr}`;
+          if (!localStorage.getItem(notifiedKey)) {
+            const mapelList = dueToday.map(t => `${t.mapel} (${t.name})`).join(', ');
+            sendPixelNotification(`⏰ DEADLINE HARI INI!`, `Tugas: ${mapelList}`);
+            localStorage.setItem(notifiedKey, 'true');
+          }
+        }
+      }
+    }
+
+    function formatIndoDate(dateStr) {
+      const [y, m, d] = dateStr.split('-');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      return `${d} ${months[parseInt(m, 10) - 1]} ${y}`;
+    }
+
+    function renderTasks() {
+      const listEl = document.getElementById('taskList');
+      const countEl = document.getElementById('taskCount');
+      const witaToday = getWitaDateInfo().dateStr;
+      let tasks = getUserTasks();
+
+      tasks.sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        if (a.deadline !== b.deadline) return a.deadline.localeCompare(b.deadline);
+        return a.createdAt - b.createdAt;
+      });
+
+      countEl.textContent = tasks.filter(t => !t.completed).length;
+      const filteredTasks = tasks.filter(t => {
+        if (currentFilter === 'pending') return !t.completed;
+        if (currentFilter === 'completed') return t.completed;
+        return true;
+      });
+
+      if (filteredTasks.length === 0) {
+        listEl.innerHTML = `<div class="empty-state">Belum ada antrian tugas.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = '';
+      filteredTasks.forEach((task, index) => {
+        const isToday = !task.completed && task.deadline === witaToday;
+        const isOverdue = !task.completed && task.deadline < witaToday;
+        let cardClass = 'task-card' + (task.completed ? ' completed' : isOverdue ? ' overdue' : isToday ? ' urgent' : '');
+        let deadlineClass = 'deadline-t
